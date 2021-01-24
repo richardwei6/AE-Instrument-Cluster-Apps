@@ -6,23 +6,21 @@ import org.zeromq.ZMQException;*/
 public final class communication {
 
     private static ZMQ.Context ctx;
-    private static ZMQ.Socket dish = null;
+    public static ZMQ.Socket sub = null;
     private static String connectionString = "";
     private static String group = "";
 
     private communication(){} // private constructor
 
     public static void init(){
-        //ctx = ZMQ.context(1); // only need 1 io thread
-        ctx = ZMQ.context(1);
+        ctx = ZMQ.context(1); // only need 1 io thread
         printVersion();
     }
 
     public static void deinit(){
         //dish.close();
-        dish.close();
+        sub.close();
         ctx.close();
-        //ctx.close();
     }
 
     protected static void printVersion(){
@@ -33,12 +31,19 @@ public final class communication {
     public static boolean connect(String connectionStr, String connectionGroup, int recvReconnect, int recvBuffer){
         connectionString = connectionStr;
         group = connectionGroup;
+<<<<<<< Updated upstream
         /*try {
             dish = ctx.socket(SocketType.DISH);
             dish.bind(connectionString);
             dish.join(group);
             dish.setReceiveTimeOut(recvReconnect);
             dish.setReceiveBufferSize(recvBuffer);
+=======
+        try {
+            sub = ctx.socket(ZMQ.SUB);
+            sub.connect(connectionString);
+            sub.subscribe("".getBytes());
+>>>>>>> Stashed changes
         }catch (ZMQException e){
             System.out.println("Connect error V");
             System.out.println(communication.convertErrno(e.getErrorCode()));
@@ -48,12 +53,18 @@ public final class communication {
     }
 
     public static boolean disconnect(){
+<<<<<<< Updated upstream
         /*try{
             dish.leave(group);
             dish.unbind(connectionString);
             dish.close();
             dish = null;
         }catch (Exception e){
+=======
+        try{
+            sub.close();
+        }catch (ZMQException e){
+>>>>>>> Stashed changes
             System.out.println(e.getMessage());
             return false;
         }*/
@@ -71,6 +82,32 @@ public final class communication {
         return true;
     }
 
+<<<<<<< Updated upstream
+=======
+    public static byte[] recv() throws ZMQException{
+        /*ByteBuffer buf = ByteBuffer.allocateDirect(100);
+        int size = dish.recvZeroCopy(buf, buf.remaining(), 0);
+        buf.flip();
+        if (size >= 0) {
+            byte[] b = new byte[size];
+            buf.get(b);
+            return b;
+        }
+        else{
+            System.out.println("bytes recv less than 0 = " + size);
+        }
+        return new byte[0];*/
+        byte[] buffer = new byte[0];
+        try{
+            buffer = sub.recv();
+        }
+        catch (ZMQException e){
+            System.out.println(e.getMessage());
+        }
+        return buffer;
+    }
+
+>>>>>>> Stashed changes
     public static String convertErrno(int errorn){
        // return ZMQ.Error.findByCode(errorn).getMessage();
         return "";

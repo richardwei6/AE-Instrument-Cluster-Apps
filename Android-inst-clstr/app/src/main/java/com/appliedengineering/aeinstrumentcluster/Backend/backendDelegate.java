@@ -8,6 +8,8 @@ import com.appliedengineering.aeinstrumentcluster.Backend.*;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQException;
 
+import java.nio.charset.Charset;
+
 // Class design found here: https://stackoverflow.com/a/36155334/
 public class backendDelegate extends AsyncTask<Void, Void, Void>{
 
@@ -37,8 +39,17 @@ public class backendDelegate extends AsyncTask<Void, Void, Void>{
     protected Void doInBackground(Void... params) {
 
         while (isRunning){
+<<<<<<< Updated upstream
             /*try {
                 //System.out.println(communication.dish.recv());
+=======
+            try {
+                System.out.println("testing recv - " + communication.sub.recvStr(Charset.defaultCharset()));
+                /*byte[] buffer = communication.recv();
+                if (buffer != null) {
+                    System.out.println("recv: " + buffer.length);
+                }*/
+>>>>>>> Stashed changes
             }
             catch (ZMQException e){
                 if (!e.equals(ZMQ.Error.EAGAIN)){
@@ -52,7 +63,11 @@ public class backendDelegate extends AsyncTask<Void, Void, Void>{
 
     public backendDelegate(){
         communication.init();
+<<<<<<< Updated upstream
         communication.connect("udp://224.0.0.1:28650", "telemetry", 3000, 10);
+=======
+        System.out.println(communication.connect("tcp://192.168.1.10:1234", "telemetry", 3000, 10));
+>>>>>>> Stashed changes
     }
 
     // preferences
