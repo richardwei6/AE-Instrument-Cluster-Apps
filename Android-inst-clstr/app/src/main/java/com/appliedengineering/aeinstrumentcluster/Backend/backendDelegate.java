@@ -7,6 +7,10 @@ import com.appliedengineering.aeinstrumentcluster.Backend.*;
 
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQException;
+import org.zeromq.EmbeddedLibraryTools;
+
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 
 // Class design found here: https://stackoverflow.com/a/36155334/
 public class backendDelegate extends AsyncTask<Void, Void, Void>{
@@ -37,22 +41,30 @@ public class backendDelegate extends AsyncTask<Void, Void, Void>{
     protected Void doInBackground(Void... params) {
 
         while (isRunning){
-            /*try {
-                //System.out.println(communication.dish.recv());
+            try {
+                //System.out.println("testing recv - " + communication.dish.recv(ZMQ.DONTWAIT));
+                ByteBuffer buffer = ByteBuffer.allocateDirect(256);
+                System.out.println("testing recv - " + communication.dish.recvZeroCopy(buffer, buffer.remaining(), ZMQ.DONTWAIT) + " : " + buffer.asCharBuffer().toString());
+                /*byte[] buffer = communication.recv();
+                if (buffer != null) {
+                    System.out.println("recv: " + buffer.length);
+                }*/
             }
             catch (ZMQException e){
-                if (!e.equals(ZMQ.Error.EAGAIN)){
+                System.out.println("exception -" + e.getMessage());
+                if (!e.equals(ZMQ.Error.EAGAIN)) {
                     System.out.println("Error - " + e.getMessage());
                 }
-            }*/
+            }
             SystemClock.sleep(1000);
         }
+
         return null;
     }
 
     public backendDelegate(){
         communication.init();
-        communication.connect("udp://224.0.0.1:28650", "telemetry", 3000, 10);
+        System.out.println(communication.connect("udp://224.0.0.1:28650", "telemetry", 3000, 10));
     }
 
     // preferences
