@@ -3,7 +3,7 @@ import time
 
 ctx = zmq.Context()
 sock = ctx.socket(zmq.PUB)
-sock.bind("tcp://*:1234")
+sock.bind("tcp://*:2000")
 
 print("Starting loop...")
 i = 1
